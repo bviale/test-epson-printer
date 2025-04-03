@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusArea = document.getElementById('status');
     
     // Check if ePOS-Print API is available
-    if (typeof epson !== 'undefined' && epson.ePOSDevice) {
+    if (typeof epson !== 'undefined' && epson.ePOSBuilder) {
         updateStatus('ePOS-Print API loaded successfully.');
     } else {
         updateStatus('Error: ePOS-Print API not available. Please check your connection.', true);
@@ -28,56 +28,42 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        updateStatus('Connecting to printer...');
+        updateStatus('Preparing print job...');
         
         try {
-            // Create a new ePOS device object
-            const epos = new epson.ePOSDevice();
+            // Create a new ePOS builder object
+            const builder = new epson.ePOSBuilder();
             
-            // Connect to the printer
-            epos.connect(printerIP, printerPort, function(connected) {
-                if (!connected) {
-                    updateStatus(`Failed to connect to the printer at ${printerIP}:${printerPort}. Please check the printer is turned on and connected to the network.`, true);
-                    return;
+            // Add text to the builder
+            builder.addText(printText);
+            builder.addFeedLine(3);
+            builder.addCut(builder.CUT_FEED);
+            
+            // Get the ESC/POS command from the builder
+            const printerData = builder.toString();
+            
+            // Use our server proxy to send the data to the printer
+            fetch('/printer-proxy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    printerIP: printerIP,
+                    printerPort: printerPort,
+                    data: printerData
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateStatus('Print job sent successfully!');
+                } else {
+                    updateStatus('Failed to print: ' + data.message, true);
                 }
-                
-                updateStatus('Connected to printer. Creating printer object...');
-                
-                // Create printer object
-                epos.createDevice('local_printer', epos.DEVICE_TYPE_PRINTER, 
-                    { crypto: false, buffer: false }, 
-                    function(device, code) {
-                        if (code !== 'OK') {
-                            updateStatus('Failed to create printer object: ' + code, true);
-                            epos.disconnect();
-                            return;
-                        }
-                        
-                        const printer = device;
-                        
-                        // Add text to print
-                        printer.addText(printText);
-                        printer.addFeedLine(3);  // Add some space at the end
-                        printer.addCut(printer.CUT_FEED);  // Cut the paper
-                        
-                        updateStatus('Sending print job...');
-                        
-                        // Send data to printer
-                        printer.send(function(result) {
-                            const success = (result === 'SUCCESS');
-                            const message = success ? 
-                                'Print job sent successfully!' : 
-                                'Failed to print: ' + result;
-                            
-                            updateStatus(message, !success);
-                            
-                            // Clean up
-                            epos.deleteDevice(printer, function() {
-                                epos.disconnect();
-                            });
-                        });
-                    }
-                );
+            })
+            .catch(error => {
+                updateStatus('Error sending print job: ' + error.message, true);
             });
         } catch (error) {
             updateStatus('Error: ' + error.message, true);
