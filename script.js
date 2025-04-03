@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
         epos.connect(printerIP, printerPort, (isConnected) => {
             if (!isConnected) {
                 updateStatus(`Failed to connect to the printer at ${printerIP}:${printerPort}. 
-                If you're using HTTPS, check that your browser allows insecure connections to local devices.`, true);
+                Please check your printer is on and properly configured for HTTPS connections.`, true);
                 return;
             }
             
