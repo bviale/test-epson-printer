@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Check if we're running in a secure context (HTTPS)
     if (window.isSecureContext) {
-        // We're in a secure context, but we still need to access a local printer
+        // We're in a secure context and can use secure connections to the printer
         securityInfo.style.display = 'block';
+        securityInfo.innerHTML = 'Running in secure context. HTTPS connections to printer are enabled.';
     }
     
     // Check if ePOS-Print API is available
@@ -50,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             updateStatus('Connected to printer. Creating printer object...');
             
-            // Create printer object
+            // Create printer object with secure connection
             epos.createDevice('local_printer', epos.DEVICE_TYPE_PRINTER, 
-                { crypto: false, buffer: false }, 
+                { crypto: true, buffer: false }, 
                 function(printer, code) {
                     if (code !== 'OK') {
                         updateStatus('Failed to create printer object: ' + code, true);
