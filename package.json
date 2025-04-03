@@ -1,0 +1,10 @@
+{
+  "name": "epson-printer-app",
+  "version": "1.0.0",
+  "description": "Web app for Epson TM-M30II printer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "cert": "openssl req -nodes -new -x509 -keyout key.pem -out cert.pem"
+  }
+}
