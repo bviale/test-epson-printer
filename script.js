@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 function(printer, code) {
                     if (code !== 'OK') {
                         updateStatus('Failed to create printer object: ' + code, true);
-                        prompt(`https://${printerIP}/`);
+                        prompt('Copy paste this url in your browser and allow security exception on it: ', `https://${printerIP}/`);
                         epos.disconnect();
                         return;
                     }
