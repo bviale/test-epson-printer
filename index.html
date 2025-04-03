@@ -5,10 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Epson TM-M30II Printer</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Consider adding a meta tag for CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src *;">
 </head>
 <body>
     <div class="container">
         <h1>Epson TM-M30II Printer</h1>
+        
+        <div id="securityInfo" class="security-notice" style="display: none;">
+            <h3>⚠️ Browser Security Notice</h3>
+            <p>This app needs to communicate with your local printer. If you're using HTTPS and encounter connection errors:</p>
+            <ol>
+                <li>Make sure your printer is on and connected to the same network</li>
+                <li>For Chrome: Go to Site Settings and allow "Insecure content" for this site</li>
+                <li>For Firefox: Click the shield icon in the address bar and disable protection for this site</li>
+                <li>For Safari: This might not work due to stricter security policies</li>
+            </ol>
+        </div>
         
         <div class="printer-config">
             <h2>Printer Configuration</h2>
