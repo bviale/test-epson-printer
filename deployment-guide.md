@@ -6,10 +6,15 @@ This web application allows users to print to an Epson TM-M30II thermal printer 
 
 ### 1. GitHub Pages (Easiest)
 
-1. Fork this repository to your GitHub account
-2. Go to Settings > Pages
-3. Enable GitHub Pages from the main branch
-4. Your app will be available at `https://yourusername.github.io/repository-name/`
+This repository is already set up with GitHub Actions to deploy to GitHub Pages automatically when changes are pushed to the main branch.
+
+The app is available at: https://bviale.github.io/test-epson-printer/
+
+If you're forking this repository:
+1. Go to your repository settings
+2. Navigate to "Pages" section
+3. Under "Build and deployment", select "GitHub Actions" as the source
+4. The workflow file is already included in the repository
 
 ### 2. Any Static Web Hosting
 
