@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 function(printer, code) {
                     if (code !== 'OK') {
                         updateStatus('Failed to create printer object: ' + code, true);
+                        // Open url in a new tab
+                        window.open('https://10.0.4.14/', '_blank');
                         epos.disconnect();
                         return;
                     }
